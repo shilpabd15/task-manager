@@ -1,0 +1,390 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Task Manager CRUD",
+      "description": "Task manager Application API"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "securityDefinitions":{
+      "Bearer":{
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "tags": [
+      {
+        "name": "Tasks",
+        "description": "API for tasks in the system"
+      }
+    ],
+    "paths": {
+      "/users/login": {
+        "post": {
+          "tags": ["Users"],
+          "description": "Login",
+          "parameters": [
+            {
+              "name": "Login",
+              "in": "body",
+              "description": "Login email and password",
+              "schema":{
+                "type": "object",
+                "properties":{
+                    "email":{
+                      "type": "string"
+                    },
+                    "password":{
+                       "type": "string"
+                    }
+                }
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Logged In"
+            }
+          }
+        }
+      },
+      "/users/logout":{
+        "post": {
+          "security": [
+            {
+               "Bearer": [],
+               "required":true
+            }
+         ],
+          "tags": ["Users"],
+          "summary": "Logs out user from system",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/users/logoutAll":{
+        "post": {
+          "security": [
+            {
+               "Bearer": [],
+               "required":true
+            }
+         ],
+          "tags": ["Users"],
+          "summary": "Logs out a user from all the places",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+        "/users": {
+            "post": {
+              "tags": ["Users"],
+              "description": "Create new user in system",
+              "parameters": [
+                {
+                  "name": "user",
+                  "in": "body",
+                  "description": "User that we want to create",
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                        "name":{
+                          "type": "string"
+                        },
+                        "email":{
+                           "type": "string"
+                        },
+                        "password":{
+                            "type": "string"
+                        },
+                        "age":{
+                           "type": "number"
+                        }
+                    }
+                  }
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "New user is created"
+                }
+              }
+            }
+          },
+          "/users/me":{
+            "get": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Users"],
+              "summary": "Get an individual user details",
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            },
+            "delete": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Users"],
+              "description": "Deletes one user based on Id",
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "ok"
+                }
+              }
+            },
+            "patch": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Users"],
+              "description": "Updates a single user details based on Id",
+              "parameters": [
+                {
+                  "name": "user",
+                  "in": "body",
+                  "description": "User values that you want to update",
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                        "name":{
+                          "type": "string"
+                        },
+                        "password":{
+                            "type": "string"
+                        },
+                        "age":{
+                           "type": "number"
+                        }
+                    }
+                  }
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "Updated user"
+                }
+              }
+            }
+          },
+          "/tasks": {
+            "post": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Tasks"],
+              "description": "Create new task in system",
+              "parameters": [
+                {
+                  "name": "task",
+                  "in": "body",
+                  "description": "Task that we want to create",
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                        "description":{
+                          "type": "string"
+                        },
+                        "completed":{
+                           "type": "boolean"
+                        }
+                    }
+                  }
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "New user is created"
+                }
+              }
+            },
+            "get": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Tasks"],
+              "parameters": [
+                {
+                  "name": "completed",
+                  "in": "query",
+                  "description": "Completed value - true/false"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "description": "limit the tasks returned"
+                },
+                {
+                  "name": "skip",
+                  "in": "query",
+                  "description": "Number of tasks you want to skip"
+                },
+                {
+                  "name": "sortBy",
+                  "in": "query",
+                  "description": "sortBy createdAt in desc order or asc order"
+                }
+              ],
+              "summary": "Get all tasks in the system",
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            }
+          },
+          "/tasks/{id}": {
+            "get": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Tasks"],
+              "description": "Returns one task based on Id",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "Id of the task",
+                  "required":true
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "task based on Id"
+                }
+              }
+            },
+            "patch": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Tasks"],
+              "description": "Updates a single task details based on Id",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "Id of the task",
+                  "required":true
+                },
+                {
+                  "name": "task",
+                  "in": "body",
+                  "description": "Taks values that you want to update",
+                  "schema":{
+                    "type": "object",
+                    "properties":{
+                        "description":{
+                          "type": "string"
+                        },
+                        "completed":{
+                            "type": "string"
+                        }
+                    }
+                  }
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "Updated task"
+                }
+              }
+            },
+            "delete": {
+              "security": [
+                {
+                   "Bearer": [],
+                   "required":true
+                }
+             ],
+              "tags": ["Tasks"],
+              "description": "Deletes one task based on Id",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "Id of the task",
+                  "required":true
+                }
+              ],
+              "produces": ["application/json"],
+              "responses": {
+                "200": {
+                  "description": "Deleted task"
+                }
+              }
+            }
+          }
+        },
+      "definitions": {
+        "User": {
+          "properties": {
+            "_id": {
+              "type": "integer",
+              "uniqueItems": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "age":{
+              "type": "number"
+            },
+            "email":{
+                "type": "string"
+            }
+          }
+        }
+      },
+      "components": {        
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  }
